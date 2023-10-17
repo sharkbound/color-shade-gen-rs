@@ -1,6 +1,8 @@
 pub mod color_row;
-pub mod color;
+pub mod colorvalue;
+pub mod color_conversions;
 mod stepmode;
+mod clamp_to_percent;
 
 use eframe::{App, Frame};
 use eframe::egui::Context;
