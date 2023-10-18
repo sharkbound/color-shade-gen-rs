@@ -1,16 +1,14 @@
-pub mod color_row;
-pub mod colorvalue;
-mod stepmode;
+pub mod color_ramp;
 mod clamp_to_percent;
 
+use std::default::Default;
 use eframe::{App, Frame};
 use eframe::egui::Context;
 use eframe::egui as egui;
-use eframe::egui::color_picker::Alpha;
-use crate::color_row::ColorRow;
+use crate::color_ramp::ColorRamp;
 
 pub struct MainApp {
-    color_rows: Vec<ColorRow>,
+    color_rows: Vec<ColorRamp>,
 }
 
 impl MainApp {
@@ -31,7 +29,8 @@ impl MainApp {
 impl Default for MainApp {
     fn default() -> Self {
         Self {
-            color_rows: vec![],
+            // debug
+            color_rows: vec![Default::default(), Default::default()],
         }
     }
 }
@@ -40,10 +39,11 @@ impl App for MainApp {
     fn update(&mut self, ctx: &Context, frame: &mut Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.vertical(|ui| {
-                ui.horizontal(|ui| {
-                    egui::color_picker::show_color(ui, self.color_32, egui::Vec2::new(10f32, 10f32))
-                    // egui::color_picker::color_picker_color32(ui, &mut self.color_32, Alpha::BlendOrAdditive);
-                });
+                for row in self.color_rows.iter() {
+                    ui.horizontal(|ui| {
+                        row.render(ui);
+                    });
+                }
             });
         });
     }
